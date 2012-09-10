@@ -1,0 +1,31 @@
+{% include 'templates/dashboard/header.html' %}
+<center>
+    <div class="summary" id="summary-table">
+        <p class="title">Manifest Commits</p>
+
+        <table class="display" id="builds-table">
+            <thead>
+                <tr>
+                    <th class="left" width="19%">project</th>
+                    <th class="left" width="25%">commit</th>
+                    <th class="left" width="14%">author</th>
+                    <th class="left" width="14%">message</th>
+                    <th class="left" width="14%">fullversion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row.project }}</></td>
+                    <td>{{ row.commit }}</td>
+                    <td>{{ row.author }}</td>
+                    <td>{{ row.message}}</td>
+                    <td>{{ row.fullversion }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</center>
+{% include 'templates/dashboard/footer.html' %}

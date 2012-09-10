@@ -1,0 +1,33 @@
+{% include 'header.html' %}
+<center>
+    <div class="summary" id="summary-table">
+        <p class="title">Dashboard</p>
+
+        <table class="display" id="stats_table">
+            <thead>
+                <tr>
+                    <th class="left" width="19%">Latest update</th>
+                    <th class="left" width="25%">Test ID</th>
+                    <th class="left" width="14%">Spec. name</th>
+                    <th class="left" width="14%">Cluster</th>
+                    <th class="left" width="14%">Build</th>
+                    <th class="left" width="14%">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row.timestamp }}</td>
+                    <td class="test_id"><a href='/details?id={{ row.test_id }}'>{{ row.test_id }}</a></td>
+                    <td>{{ row.spec }}</td>
+                    <td>{{ row.ini }}</td>
+                    <td>{{ row.build }}</td>
+                    <td>{{ row.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</center>
+{% include 'footer.html' %}

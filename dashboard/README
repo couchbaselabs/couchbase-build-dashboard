@@ -1,0 +1,27 @@
+build dashboard
+
+Build:
+version
+arch
+os
+buildlog
+link
+license
+manifest
+
+
+Manifest:
+git-id,commit
+
+
+reports:
+Build
+        build.deliverable_type = self._product_deliverable_type(build_id)
+        build.time = self._product_time(build_decription)
+        build.size = self._product_size(build_decription)
+        build.product_version = self._product_version(build_id)
+        build.architecture_type = self._product_arch_type(build_id)
+        build.product = self._product_name(build_id)
+        build.name = build_id
+        build.build_number = self._build_number(build)
+        build.toy = self._product_toy(build_id)

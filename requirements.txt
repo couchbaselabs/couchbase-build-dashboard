@@ -1,0 +1,4 @@
+easy_install django-ratings
+easy_install django-piston
+easy_install gitpython
+easy_install django

@@ -1,0 +1,30 @@
+/* Document Body */
+body {
+    color: #252525;
+}
+body a {
+    color: #252525;
+    text-decoration: none;
+}
+body a:hover {
+    text-decoration: underline;
+}
+/* Summary Table on Home Page */
+.summary {
+    width: 1280px;
+    visibility: hidden;
+}
+.summary .title {
+    font-family: times, "Times New Roman", times-roman, georgia, serif;
+    font-weight: bold;
+    font-size: 108%;
+    margin: 0 0 12px 0;
+    text-align: left;
+}
+.summary table {
+    table-layout: fixed;
+}
+
+.summary .display .test_id {
+   font-weight: 500;
+}

@@ -1,0 +1,12 @@
+build : 
+        "product": "couchbase-server", 
+        "name": "couchbase-server-community_toy-trond-x86_64_1.8.1-123-rel.rpm", 
+        "license": "community", 
+        "package": "rpm", 
+        "url": "http://builds.hq.northscale.net/latestbuilds/couchbase-server-community_toy-trond-x86_64_1.8.1-123-rel.rpm", 
+        "arch": "x86_64", 
+        "version": "1.8.1", 
+        "fullversion": "1.8.1-123-rel", 
+        "os": "rpm"
+        "id": product-license-os-full-version
+

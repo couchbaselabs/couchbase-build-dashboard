@@ -1,0 +1,34 @@
+{% include 'templates/dashboard/header.html' %}
+<center>
+    <div class="summary" id="summary-table">
+        <p class="title">Build Dashboard</p>
+
+        <table class="display" id="builds-table">
+            <thead>
+            <tr>
+                <th class="left" width="19%">Artifact</th>
+                <th class="left" width="25%">Build Number</th>
+                <th class="left" width="14%">Operating System</th>
+                <th class="left" width="14%">Architechture</th>
+                <th class="left" width="14%">Version</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in data %}
+                <tr>
+                    <td><a href='{{ row.url }}'>{{ row.name }}</a></td>
+                    <td>
+                        <a href='/dashboard/manifest?fullversion={{ row.fullversion }}&package_type={{ row.os }}'>{{ row.fullversion }}</a>
+                    </td>
+                    <td>{{ row.os }}</td>
+                    <td>{{ row.arch }}</td>
+                    <td>{{ row.version }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</center>
+{% include 'templates/dashboard/footer.html' %}
+

@@ -1,0 +1,4 @@
+* for each build when it appears dashboard will load the git messages
+
+find the manifest for the build , download the url and save it there
+

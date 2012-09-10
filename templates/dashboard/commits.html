@@ -1,0 +1,26 @@
+{% include '../templates/dashboard/header.html' %}
+<center>
+    <div class="summary" id="summary-table">
+        <p class="title">Git Commits Dashboard</p>
+        <table class="display" id="builds-table">
+            <thead>
+            <tr>
+                <th class="left" width="25%">builds</th>
+                <th class="left" width="25%">commit</th>
+                <th class="left" width="50%">message</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in data %}
+                <tr>
+                    <td>{{ row.builds }}</td>
+                    <td>{{ row.revision }}</td>
+                    <td>{{ row.message }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</center>
+{% include '../templates/dashboard/footer.html' %}
+
