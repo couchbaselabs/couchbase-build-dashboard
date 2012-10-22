@@ -1,34 +1,33 @@
-{% include 'templates/dashboard/header.html' %}
+{% include '../templates/dashboard/header.html' %}
 <center>
     <div class="summary" id="summary-table">
-        <p class="title">Build Dashboard</p>
+        <p class="title">{{ title}}</p>
 
         <table class="display" id="builds-table">
             <thead>
             <tr>
-                <th class="left" width="19%">Artifact</th>
-                <th class="left" width="25%">Build Number</th>
-                <th class="left" width="14%">Operating System</th>
-                <th class="left" width="14%">Architechture</th>
-                <th class="left" width="14%">Version</th>
+                <th class="left" width="40%">Build Number</th>
+                <th class="left" width="20%">manifest</th>
+                <th class="left" width="20%">Version</th>
             </tr>
             </thead>
             <tbody>
             {% for row in data %}
                 <tr>
-                    <td><a href='{{ row.url }}'>{{ row.name }}</a></td>
                     <td>
-                        <a href='/dashboard/manifest?fullversion={{ row.fullversion }}&package_type={{ row.os }}'>{{ row.fullversion }}</a>
+                        <a href='{{ row.url }}'>{{ row.name}} {{row.arch}}</a>
+                        <a href='/dashboard/manifest?fullversion={{ row.fullversion }}&package_type={{ row.os }}'>.</a> 
                     </td>
-                    <td>{{ row.os }}</td>
-                    <td>{{ row.arch }}</td>
-                    <td>{{ row.version }}</td>
+                    <td>{{ row.manifest }}</td>
+                    <td>{{ row.buildnumber }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
 
     </div>
+    <div>
+	</div>
 </center>
-{% include 'templates/dashboard/footer.html' %}
+{% include '../templates/dashboard/footer.html' %}
 

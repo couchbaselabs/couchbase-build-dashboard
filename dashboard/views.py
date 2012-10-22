@@ -14,6 +14,22 @@ from populatemanifest import ManifestPopulate
 
 import django_tables2 as tables
 
+
+class DataHelper(object):
+	
+	@staticmethod
+	def multikeysort(items, columns):
+	    from operator import itemgetter
+	    comparers = [ ((itemgetter(col[1:].strip()), -1) if col.startswith('-') else (itemgetter(col.strip()), 1)) for col in columns]  
+	    def comparer(left, right):
+	        for fn, mult in comparers:
+	            result = cmp(fn(left), fn(right))
+	            if result:
+	                return mult * result
+	        else:
+	            return 0
+	    return sorted(items, cmp=comparer)
+
 class ArtifactsTable(tables.Table):
     name = tables.Column(orderable=True)
     url = tables.Column()
@@ -42,6 +58,7 @@ def details(request):
     logger = logging.getLogger('dashboard')
     artifacts = list()
     version = request.GET.get('version')
+    license = request.GET.get('license') or 'community'
     os = request.GET.get('os')
     #read all builds from couchbase server
     couchbase = CbClient("localhost", 8091, "Administrator", "password")
@@ -52,13 +69,36 @@ def details(request):
     #  emit(doc.name, [doc.name,doc.url,doc.fullversion,doc.arch,doc.version]);
     for item in allbuilds["rows"]:
         value = item["value"]
-        if version == value["version"] and os == value["os"]:
-            artifacts.append({"name": value["name"],
-                              "url": value["url"], "fullversion": value["fullversion"],
-                              "arch": value["arch"], "version": value["version"],
-                              "os": value["os"]})
-    return render_to_response('templates/dashboard/details.html',
-            {'title': 'Dashboard', 'data': artifacts})
+        if value["fullversion"].find("toy") >= 0:
+            continue
+        value['buildnumber'] = value["fullversion"][value["fullversion"].find("-")+1:value["fullversion"].rfind("-")]
+        license_match = value["name"].find(license) > 0
+        logger.error("license_match %s for %s" % (license_match, value["name"]))
+        arch_display_name = ''
+        if value["arch"] == "x86_64":
+            arch_display_name = "64-bit"
+        else:
+	        arch_display_name = "32-bit"
+        if version == value["version"] and os == value["os"] and license_match is True:
+            artifact_item = {"name": value["name"],"url": value["url"], 
+                             "fullversion": value["fullversion"],"arch": arch_display_name, 
+                             "buildnumber": int(value['buildnumber']),"os": value["os"]}
+            #get the manifest if it exists ?
+            artifact_item["manifest"] = manifest_for_build(value["fullversion"]) or "not fond"
+            artifacts.append(artifact_item)
+
+    couchbase.close()
+    os_display_name = ''
+    if os == 'rpm':
+        os_display_name = 'Centos'
+    elif os == 'deb':
+        os_display_name = 'Ubuntu'
+    elif os == 'windows':
+        os_display_name = 'Windows'
+    title = "%s builds ( 32-bit and 64-bit) %s edition" % (os_display_name, license)
+    artifacts = DataHelper.multikeysort(artifacts, ['buildnumber'])
+    return render_to_response('../templates/dashboard/details.html',
+            {'title': title, 'data': artifacts})
 
 
 def _download(url):
@@ -188,8 +228,20 @@ def gitx(request):
     
     
 #    6dab6744c77a1f044017e0b79573185264f7bb09
-    couchbase.done()
-    cbclient.close()
+#    couchbase.done()
+#    cbclient.close()
+
+
+def manifest_for_build(buildnumber):
+    logger = logging.getLogger('manifest_for_build')
+    couchbase = CbClient("localhost", 8091, "Administrator", "password")
+    manifests = manifests = couchbase.query(bucket='default', ddoc='builds', view='manifests', limit=20000,
+        params={"startkey": "\"" + buildnumber + "\""})
+    result = []
+    for item in manifests["rows"]:
+        result.append(item["value"])
+    return result
+
 
 def manifest(request):
     logger = logging.getLogger('dashboard')
@@ -203,7 +255,7 @@ def manifest(request):
     for item in manifests["rows"]:
         logger.error(package_type)
         value = item["value"]
-#        logger.error(value)
+        logger.error(value)
         if value["name"].find(package_type) >= 0:
             url = value["url"]
             logger.error("downloading manifest from url %s" % (url))
@@ -220,10 +272,10 @@ def manifest(request):
             #for each project get the git description
             #jsonbuild
     # update database....
-    couchbase
     return render_to_response('templates/dashboard/manifest.html',
             {'title': 'manifests', 'data': descriptions})
 
     #for each key value get the message and description and then print this out in a
     #for where we have a table column 1 is project , 2 is commit id and then thrird column has
     # the description
+

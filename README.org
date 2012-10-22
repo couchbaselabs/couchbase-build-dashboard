@@ -1,0 +1,561 @@
+assume that all build artifacts are still located under /home/buildbot/latestbuilds
+and a django app is running in localhost:8080 and couchbase server is also running
+at localhost:8091 user needs to run dashboard/builddbclient.py script
+
+
+Design Documents:
+
+builds
+ -commits
+function (doc, meta) {
+  if (meta.type == "json") {
+    version = doc["fullversion"];
+    if(doc["package"] == "manifest" && doc["name"].indexOf("-rel.manifest") == -1) {
+      for(i=0;i<doc["commits"].length;i++) {
+        key = doc["commits"][i]["name"] + "-" + doc["commits"][i]["revision"];
+        emit(key,[doc["commits"][i]["revision"],version]);
+      }
+    }
+  }
+}
+ -manifests
+function (doc, meta) {
+  if (meta.type == "json") {
+    version = doc["fullversion"];
+    if(doc["package"] == "manifest" && doc["name"].indexOf("-rel.manifest") == -1) {
+      for(i=0;i<doc["commits"].length;i++) {
+        key = doc["commits"][i]["name"] + "-" + doc["commits"][i]["revision"];
+        emit(key,[doc["commits"][i]["revision"],version]);
+      }
+    }
+  }
+}
+ -metadata
+function (doc, meta) {
+  if (meta.type == "json") {
+    version = doc["fullversion"];
+    if(doc["package"] == "manifest" && doc["name"].indexOf("-rel.manifest") == -1) {
+      for(i=0;i<doc["commits"].length;i++) {
+        key = doc["commits"][i]["name"] + "-" + doc["commits"][i]["revision"];
+        emit(key,[doc["commits"][i]["revision"],version]);
+      }
+    }
+  }
+}
+
+docoment sample:
+{
+   "product": "couchbase-server",
+   "license": "enterprise",
+   "fullversion": "2.0.0-1730-rel",
+   "package": "md5",
+   "url": "http://builds.hq.northscale.net/latestbuilds/couchbase-server-enterprise_x86_2.0.0-1730-rel.rpm.md5",
+   "arch": "x86",
+   "version": "2.0.0",
+   "os": "rpm"
+}
+
+manifest example:
+
+{
+   "product": "couchbase-server",
+   "name": "couchbase-server-community_x86_64_2.0.0-1449-rel.setup.exe.manifest.xml",
+   "license": "community",
+   "package": "manifest",
+   "url": "http://builds.hq.northscale.net/latestbuilds/couchbase-server-community_x86_64_2.0.0-1449-rel.setup.exe.manifest.xml",
+   "os": "",
+   "version": "2.0.0",
+   "commits": [
+       {
+           "name": "tlm",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "612d0d190039687dc31d03a01d5a678634729749"
+       },
+       {
+           "name": "tlm",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "612d0d190039687dc31d03a01d5a678634729749"
+       },
+       {
+           "name": "tlm",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "612d0d190039687dc31d03a01d5a678634729749"
+       },
+       {
+           "name": "bucket_engine",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "92b302204971e6aaa43685d11ec924d54929a20a"
+       },
+       {
+           "name": "bucket_engine",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "92b302204971e6aaa43685d11ec924d54929a20a"
+       },
+       {
+           "name": "bucket_engine",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "92b302204971e6aaa43685d11ec924d54929a20a"
+       },
+       {
+           "name": "ep-engine",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "7021cd4184011c9baf98ac27c9eb836761482d81"
+       },
+       {
+           "name": "ep-engine",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "7021cd4184011c9baf98ac27c9eb836761482d81"
+       },
+       {
+           "name": "ep-engine",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "7021cd4184011c9baf98ac27c9eb836761482d81"
+       },
+       {
+           "name": "libcbio",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "caad1fd59cd8714a1b6a747c6860705946f54ab5"
+       },
+       {
+           "name": "libcbio",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "caad1fd59cd8714a1b6a747c6860705946f54ab5"
+       },
+       {
+           "name": "libcbio",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "caad1fd59cd8714a1b6a747c6860705946f54ab5"
+       },
+       {
+           "name": "libconflate",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8714537b391a3edfb6e277d31738d928b78c5fdd"
+       },
+       {
+           "name": "libconflate",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8714537b391a3edfb6e277d31738d928b78c5fdd"
+       },
+       {
+           "name": "libconflate",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8714537b391a3edfb6e277d31738d928b78c5fdd"
+       },
+       {
+           "name": "libcouchbase",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "a6928d0b6afe0303490daa4f085c95d86801c2bb"
+       },
+       {
+           "name": "libcouchbase",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "a6928d0b6afe0303490daa4f085c95d86801c2bb"
+       },
+       {
+           "name": "libcouchbase",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "a6928d0b6afe0303490daa4f085c95d86801c2bb"
+       },
+       {
+           "name": "libmemcached",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "ca739a890349ac36dc79447e37da7caa9ae819f5"
+       },
+       {
+           "name": "libmemcached",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "ca739a890349ac36dc79447e37da7caa9ae819f5"
+       },
+       {
+           "name": "libmemcached",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "ca739a890349ac36dc79447e37da7caa9ae819f5"
+       },
+       {
+           "name": "libmemcached",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "ca739a890349ac36dc79447e37da7caa9ae819f5"
+       },
+       {
+           "name": "libvbucket",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "572e1131b9b67bf76ef7a09e377df2024e3dee31"
+       },
+       {
+           "name": "libvbucket",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "572e1131b9b67bf76ef7a09e377df2024e3dee31"
+       },
+       {
+           "name": "libvbucket",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "572e1131b9b67bf76ef7a09e377df2024e3dee31"
+       },
+       {
+           "name": "membase-cli",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "b7f865fadd7fd11a73a3acc02bdfc2526783a8c2"
+       },
+       {
+           "name": "membase-cli",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "b7f865fadd7fd11a73a3acc02bdfc2526783a8c2"
+       },
+       {
+           "name": "membase-cli",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "b7f865fadd7fd11a73a3acc02bdfc2526783a8c2"
+       },
+       {
+           "name": "membase-cli",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "b7f865fadd7fd11a73a3acc02bdfc2526783a8c2"
+       },
+       {
+           "name": "memcached",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "0fe284e9f95a1ecd6a0a291748f64cdc0a22c0f4"
+       },
+       {
+           "name": "memcached",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "0fe284e9f95a1ecd6a0a291748f64cdc0a22c0f4"
+       },
+       {
+           "name": "memcached",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "0fe284e9f95a1ecd6a0a291748f64cdc0a22c0f4"
+       },
+       {
+           "name": "memcached",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "0fe284e9f95a1ecd6a0a291748f64cdc0a22c0f4"
+       },
+       {
+           "name": "memcachetest",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "35fd1b9c4bf1ed46b5716b88493e9f156e65a900"
+       },
+       {
+           "name": "memcachetest",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "35fd1b9c4bf1ed46b5716b88493e9f156e65a900"
+       },
+       {
+           "name": "memcachetest",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "35fd1b9c4bf1ed46b5716b88493e9f156e65a900"
+       },
+       {
+           "name": "memcachetest",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "35fd1b9c4bf1ed46b5716b88493e9f156e65a900"
+       },
+       {
+           "name": "moxi",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "52a5fa887bfff0bf719c4ee5f29634dd8707500e"
+       },
+       {
+           "name": "moxi",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "52a5fa887bfff0bf719c4ee5f29634dd8707500e"
+       },
+       {
+           "name": "moxi",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "52a5fa887bfff0bf719c4ee5f29634dd8707500e"
+       },
+       {
+           "name": "ns_server",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "5bff11728888bf48b1a723377791b9e23ffc69b1"
+       },
+       {
+           "name": "ns_server",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "5bff11728888bf48b1a723377791b9e23ffc69b1"
+       },
+       {
+           "name": "ns_server",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "5bff11728888bf48b1a723377791b9e23ffc69b1"
+       },
+       {
+           "name": "portsigar",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "1bc865e1622fb93a3fe0d1a4cdf18eb97ed9d600"
+       },
+       {
+           "name": "portsigar",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "1bc865e1622fb93a3fe0d1a4cdf18eb97ed9d600"
+       },
+       {
+           "name": "portsigar",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "1bc865e1622fb93a3fe0d1a4cdf18eb97ed9d600"
+       },
+       {
+           "name": "sigar",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "f446a872bee85251122ed1d101683424bc3ab67f"
+       },
+       {
+           "name": "sigar",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "f446a872bee85251122ed1d101683424bc3ab67f"
+       },
+       {
+           "name": "sigar",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "f446a872bee85251122ed1d101683424bc3ab67f"
+       },
+       {
+           "name": "couchbase-examples",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "d7702bc16e3bbca58ac0bf8237572061eaa54763"
+       },
+       {
+           "name": "couchbase-examples",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "d7702bc16e3bbca58ac0bf8237572061eaa54763"
+       },
+       {
+           "name": "couchbase-examples",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "d7702bc16e3bbca58ac0bf8237572061eaa54763"
+       },
+       {
+           "name": "couchbase-python-client",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8d4c79e10b2887cd63f534b5c6f2d856fba8a84d"
+       },
+       {
+           "name": "couchbase-python-client",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8d4c79e10b2887cd63f534b5c6f2d856fba8a84d"
+       },
+       {
+           "name": "couchbase-python-client",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8d4c79e10b2887cd63f534b5c6f2d856fba8a84d"
+       },
+       {
+           "name": "couchdb",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "f6b1c29bb6f0fe55eac2347c7d49bc9cc354e619"
+       },
+       {
+           "name": "couchdb",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "f6b1c29bb6f0fe55eac2347c7d49bc9cc354e619"
+       },
+       {
+           "name": "couchdb",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "f6b1c29bb6f0fe55eac2347c7d49bc9cc354e619"
+       },
+       {
+           "name": "couchdbx-app",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "4b308f6fe29ddfd9cdad866660189a8d26dcd426"
+       },
+       {
+           "name": "couchdbx-app",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "4b308f6fe29ddfd9cdad866660189a8d26dcd426"
+       },
+       {
+           "name": "couchdbx-app",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "4b308f6fe29ddfd9cdad866660189a8d26dcd426"
+       },
+       {
+           "name": "couchstore",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "88bc85b26c1b32add9a7a366b70cfaaae563ac2f"
+       },
+       {
+           "name": "couchstore",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "88bc85b26c1b32add9a7a366b70cfaaae563ac2f"
+       },
+       {
+           "name": "couchstore",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "88bc85b26c1b32add9a7a366b70cfaaae563ac2f"
+       },
+       {
+           "name": "geocouch",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "676e39210dc0c58bcdf304fa90803a069cad5bee"
+       },
+       {
+           "name": "geocouch",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "676e39210dc0c58bcdf304fa90803a069cad5bee"
+       },
+       {
+           "name": "geocouch",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "676e39210dc0c58bcdf304fa90803a069cad5bee"
+       },
+       {
+           "name": "mccouch",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "88701cc326bc3dde4ed072bb8441be83adcfb2a5"
+       },
+       {
+           "name": "mccouch",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "88701cc326bc3dde4ed072bb8441be83adcfb2a5"
+       },
+       {
+           "name": "mccouch",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "88701cc326bc3dde4ed072bb8441be83adcfb2a5"
+       },
+       {
+           "name": "testrunner",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "2ee3d346516d2d7796b767fe67d333bf07d71d9a"
+       },
+       {
+           "name": "testrunner",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "2ee3d346516d2d7796b767fe67d333bf07d71d9a"
+       },
+       {
+           "name": "testrunner",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "2ee3d346516d2d7796b767fe67d333bf07d71d9a"
+       },
+       {
+           "name": "workload-generator",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "0d57d80c3cef28142dd3a423303b1e8cef56421b"
+       },
+       {
+           "name": "workload-generator",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "0d57d80c3cef28142dd3a423303b1e8cef56421b"
+       },
+       {
+           "name": "workload-generator",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "0d57d80c3cef28142dd3a423303b1e8cef56421b"
+       },
+       {
+           "name": "otp",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "b6dc1a844eab061d0a7153d46e7e68296f15a504"
+       },
+       {
+           "name": "otp",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "b6dc1a844eab061d0a7153d46e7e68296f15a504"
+       },
+       {
+           "name": "otp",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "b6dc1a844eab061d0a7153d46e7e68296f15a504"
+       },
+       {
+           "name": "otp",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "b6dc1a844eab061d0a7153d46e7e68296f15a504"
+       },
+       {
+           "name": "icu4c",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "26359393672c378f41f2103a8699c4357c894be7"
+       },
+       {
+           "name": "icu4c",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "26359393672c378f41f2103a8699c4357c894be7"
+       },
+       {
+           "name": "icu4c",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "26359393672c378f41f2103a8699c4357c894be7"
+       },
+       {
+           "name": "icu4c",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "26359393672c378f41f2103a8699c4357c894be7"
+       },
+       {
+           "name": "snappy",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "5681dde156e9d07adbeeab79666c9a9d7a10ec95"
+       },
+       {
+           "name": "snappy",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "5681dde156e9d07adbeeab79666c9a9d7a10ec95"
+       },
+       {
+           "name": "snappy",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "5681dde156e9d07adbeeab79666c9a9d7a10ec95"
+       },
+       {
+           "name": "snappy",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "5681dde156e9d07adbeeab79666c9a9d7a10ec95"
+       },
+       {
+           "name": "v8",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "447decb75060a106131ab4de934bcc374648e7f2"
+       },
+       {
+           "name": "v8",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "447decb75060a106131ab4de934bcc374648e7f2"
+       },
+       {
+           "name": "v8",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "447decb75060a106131ab4de934bcc374648e7f2"
+       },
+       {
+           "name": "v8",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "447decb75060a106131ab4de934bcc374648e7f2"
+       },
+       {
+           "name": "gperftools",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8f60ba949fb8576c530ef4be148bff97106ddc59"
+       },
+       {
+           "name": "gperftools",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8f60ba949fb8576c530ef4be148bff97106ddc59"
+       },
+       {
+           "name": "gperftools",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8f60ba949fb8576c530ef4be148bff97106ddc59"
+       },
+       {
+           "name": "gperftools",
+           "fullversion": "2.0.0-1449-rel",
+           "revision": "8f60ba949fb8576c530ef4be148bff97106ddc59"
+       }
+   ],
+   "fullversion": "2.0.0-1449-rel",
+   "arch": "x86_64"
+}
+
+commit example:
+{
+   "project": "couchdb",
+   "message": "Refactored snappy NIF.\n\n\n\ngit-svn-id: https://svn.apache.org/repos/asf/couchdb/trunk@1098691 13f79535-47bb-0310-9956-ffa450edef68\n",
+   "revision": "9fb3decfc339a1e98a0bbcfe8e66132f3cc21729",
+   "author": "Paul Joseph Davis"
+}
+

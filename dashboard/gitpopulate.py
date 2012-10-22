@@ -25,6 +25,3 @@ class GitPopulate(object):
                         "author":str(c.author),
                         "revision":c.hexsha})
         return commits
-
-
-
