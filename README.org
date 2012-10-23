@@ -2,6 +2,11 @@ assume that all build artifacts are still located under /home/buildbot/latestbui
 and a django app is running in localhost:8080 and couchbase server is also running
 at localhost:8091 user needs to run dashboard/builddbclient.py script
 
+invoke api/populate to add new build , manifest or ...
+invoke .. to see the latest builds for certain platform
+invoke .. to populate git information for certain project
+invoke .. to search for builds which has fix for certain bug
+
 
 Design Documents:
 
@@ -40,6 +45,13 @@ function (doc, meta) {
         emit(key,[doc["commits"][i]["revision"],version]);
       }
     }
+  }
+}
+
+-commits_message
+function (doc, meta) {
+  if (doc.author != null && doc.message != null && doc.revision != null) {
+    emit(doc.message,doc.revision);
   }
 }
 
