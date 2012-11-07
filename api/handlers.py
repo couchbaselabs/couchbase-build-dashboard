@@ -1,11 +1,13 @@
+import logging
+import re
+import json
+import os.path
+
 from viewcouchbase.client import CbClient
 from piston.handler import BaseHandler
 from piston.utils import rc
 from django import forms
 from couchbase.couchbaseclient import CouchbaseClient
-import logging
-import re
-import json
 
 class RawBuildNameDecodedHelper(object):
     @staticmethod
@@ -22,50 +24,55 @@ class RawBuildNameDecodedHelper(object):
         data = {}
         if name.find("couchbase-server") >= 0:
             data["product"] = "couchbase-server"
+
         if name.find("moxi-server") >= 0:
             data["product"] = "moxi-server"
+
         if name.find("community") >= 0:
             data["license"] = "community"
+
         if name.find("enterprise") >= 0:
             data["license"] = "enterprise"
+
         if "product" in data and data["product"] == "couchbase-server":
             if name.find("x86_64") >= 0:
                 data["arch"] = "x86_64"
             elif name.find("x86") >= 0:
                 data["arch"] = "x86"
-            if name.find(".zip") >= 0:
-                data["os"] = "mac"
-                data["package"] = "zip"
-            if name.find(".dmg") >= 0:
-                data["os"] = "mac"
-                data["package"] = "dmg"
-            if name.find(".deb") >= 0:
-                data["os"] = "deb"
-                data["package"] = "deb"
-            if name.find(".rpm") >= 0:
-                data["os"] = "rpm"
-                data["package"] = "rpm"
-            if name.find(".rpm") >= 0:
-                data["os"] = "rpm"
-                data["package"] = "rpm"
-            if name.find("setup.exe") >= 0:
-                data["os"] = "windows"
-                data["package"] = "exe"
+
+            base, ext := os.path.splitext(name)
+            if ext != '':
+                ext = ext[1:]
+
+            pkg_os = {'zip': 'mac',
+                      'dmg': 'mac',
+                      'deb': 'deb', # Linux?
+                      'rpm': 'rpm', # Linux?
+                      'exe': 'windows'}
+
+            if ext in pkg_os:
+                data['package'] = ext
+                data['os'] = pkg_os[ext]
+
             if name.find(".manifest.xml") >= 0:
                 data["os"] = ""
                 data["package"] = "manifest"
-            if name.find(".md5") >= 0:
-                data["package"] = "md5"
+
             if "package" in data:
                 if name.find("1.8.1-") >= 0:
                     data["version"] = "1.8.1"
+
             if re.search(r'\d\.\d\.\d-\d*-\w\w\w', name):
                 data["fullversion"] = re.search(r'\d\.\d\.\d-\d*-\w\w\w', name).group()
+
             if name.find("2.0.0-") >= 0:
                 data["version"] = "2.0.0"
+
             if re.search(r'\d\.\d\.\d-\d*-\w\w\w', name):
                 data["fullversion"] = re.search(r'\d\.\d\.\d-\d*-\w\w\w', name).group()
+
             data["url"] = "http://builds.hq.northscale.net/latestbuilds/%s" % (name)
+
             if "arch" not in data:
                 data["arch"] = "unknown"
         return data
